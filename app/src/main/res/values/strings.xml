@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Translate app</string>
+    <string name="cancel_btn">cancel</string>
+    <string name="edit_text_hint">Enter your text</string>
+</resources>
