@@ -45,12 +45,9 @@ public class RestWordClient {
             ex.printStackTrace();
         }
 
-        if (response != null) {
-            if (response.isSuccessful()) {
-                if (response.body() != null)
+        if (response != null && response.isSuccessful() && response.body() != null)
                     return StorageWordConverter.convertRestToStorage(response.body());
-            }
-        }
+
         mCallback.handleRestWordError(response.errorBody().toString());
         return null;
     }

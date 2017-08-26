@@ -10,14 +10,6 @@ public class StorageWordConverter {
 
     public static ArrayList<StorageWord> convertRestToStorage(RestWord restWord) {
 
-//        Realm realm = Realm.getDefaultInstance();
-//
-//
-//realm.executeTransaction(new Realm.Transaction() {
-//    @Override
-//    public void execute(Realm realm) {
-//
-
         ArrayList<StorageWord> arrayList = new ArrayList<>();
 
         for (RestWord.Def def : restWord.getDef()) {
@@ -69,9 +61,6 @@ public class StorageWordConverter {
             storageWord.setList(subWords);
             arrayList.add(storageWord);
         }
-//    }
-//});
-
         return arrayList;
     }
 
