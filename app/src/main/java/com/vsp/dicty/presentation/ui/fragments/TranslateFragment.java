@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +49,8 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
     TextView mMainTranslateView;
     @Bind(R.id.word_recycler_view)
     RecyclerView mRecyclerView;
+    @Bind(R.id.translate_progress_layout)
+    View mProgressLayout;
     private TranslatePresenter mTranslatePresenter;
     private LanguagePresenter mLanguagePresenter;
     private WordRecyclerViewAdapter mWordAdapter;
@@ -91,47 +92,32 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
 
         if (toolbarLayout.indexOfChild(mToolbarView) != -1)
             return;
-
         LayoutInflater mInflater = LayoutInflater.from(getContext());
 
         mToolbarView = mInflater.inflate(R.layout.translate_toolbar, null);
         fromLangView = (TextView) mToolbarView.findViewById(R.id.from_lang_view);
         toLangView = (TextView) mToolbarView.findViewById(R.id.to_lang_view);
-
-        fromLangView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LanguagePickerDialog dialog = new LanguagePickerDialog();
-                dialog.setmLangDir(LanguagePickerDialog.FROM_LANG);
-                dialog.setmCallback(new LanguagePickerDialog.LangPickerCloseListener() {
-                    @Override
-                    public void handleDialogClose() {
-                        mLanguagePresenter.getCurrentLang();
-                    }
-                });
-                dialog.show(getFragmentManager(), "");
-            }
-        });
-
-        toLangView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LanguagePickerDialog dialog = new LanguagePickerDialog();
-                dialog.setmLangDir(LanguagePickerDialog.TO_LANG);
-                dialog.setmCallback(new LanguagePickerDialog.LangPickerCloseListener() {
-                    @Override
-                    public void handleDialogClose() {
-                        mLanguagePresenter.getCurrentLang();
-                    }
-                });
-                dialog.show(getFragmentManager(), "");
-            }
-        });
-
+        fromLangView.setOnClickListener(getOnClickListener(LanguagePickerDialog.FROM_LANG));
+        toLangView.setOnClickListener(getOnClickListener(LanguagePickerDialog.TO_LANG));
         imageButton = (ImageButton) mToolbarView.findViewById(R.id.reverse_langs_action);
-
         toolbarLayout.addView(mToolbarView);
+    }
 
+    private View.OnClickListener getOnClickListener(final String langDir) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LanguagePickerDialog dialog = new LanguagePickerDialog();
+                dialog.setmLangDir(langDir);
+                dialog.setmCallback(new LanguagePickerDialog.LangPickerCloseListener() {
+                    @Override
+                    public void handleDialogClose() {
+                        mLanguagePresenter.getCurrentLang();
+                    }
+                });
+                dialog.show(getFragmentManager(), LanguagePickerDialog.LANG_DIR_DIALOG);
+            }
+        };
     }
 
     @Override
@@ -167,6 +153,7 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
                         UntranslatedText text = new UntranslatedText();
                         text.setNotTranslatedText(editable.toString());
                         mTranslatePresenter.translateText(text);
+                        mProgressLayout.setVisibility(View.VISIBLE);
                     }
                 });
 
@@ -186,10 +173,10 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
     public void onPause() {
         super.onPause();
         Timber.e("onPause");
-        if (mWord != null)
-            mTranslatePresenter.saveWord(mWord);
-        else if (mSentence != null)
-            mTranslatePresenter.saveSentence(mSentence);
+//        if (mWord != null)
+//            mTranslatePresenter.saveWord(mWord);
+//        else if (mSentence != null)
+//            mTranslatePresenter.saveSentence(mSentence);
 //        if (lastState)
         //save sentence
 //        else if (!lastState)
@@ -228,6 +215,7 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
         Timber.e("onSentenceTranslated");
         if (stopTranslate)
             return;
+        mProgressLayout.setVisibility(View.GONE);
         mSentence = sentence;
         mWord = null;
         mWordAdapter.clear();
@@ -239,6 +227,7 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
         Timber.e("onWordTranslated");
         if (word != null) {
             if (word.size() != 0 && !stopTranslate) {
+                mProgressLayout.setVisibility(View.GONE);
                 mWord = word;
                 mSentence = null;
                 mMainTranslateView.setText(word.get(0).getMainTranslate());

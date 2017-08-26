@@ -1,40 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/untranslated_text_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="start"
         android:hint="@string/edit_text_hint"
         android:padding="10dp"
         tools:text="Здоровье" />
 
-    <TextView
-        android:id="@+id/main_translate_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/accent_text_size"
-        tools:text="health" />
+        android:layout_below="@id/untranslated_text_view"
+        android:padding="10dp">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2.5">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/word_recycler_view"
+        <RelativeLayout
+            android:id="@+id/translate_progress_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:padding="10dp" />
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha=".6"
+                android:background="@color/black" />
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/loading_view_lang_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="visible"
+                app:indicatorColor="@color/colorPrimary"
+                app:indicatorName="BallPulseIndicator" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/main_translate_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/accent_text_size"
+            android:textStyle="bold"
+            tools:text="health" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/main_translate_view">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/word_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </RelativeLayout>
+</RelativeLayout>

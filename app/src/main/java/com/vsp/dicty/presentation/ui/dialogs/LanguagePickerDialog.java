@@ -30,7 +30,7 @@ public class LanguagePickerDialog extends DialogFragment implements LanguagePres
 
     public static final String FROM_LANG = "fromLang";
     public static final String TO_LANG = "toLang";
-    private static final String LANG_DIR = "langDir";
+    public static final String LANG_DIR_DIALOG = "langDirDialog";
     ListView listView;
 
     private LanguagePresenter mLanguagePresenter;
@@ -56,9 +56,7 @@ public class LanguagePickerDialog extends DialogFragment implements LanguagePres
         }
 
         View rootView = inflater.inflate(R.layout.lang_picker_dialog, container, false);
-
         loadingView = (AVLoadingIndicatorView) rootView.findViewById(R.id.loading_view_lang_dialog);
-
         loadingView.show();
 
         rootView.findViewById(R.id.cancel_lang_picker_dialog).setOnClickListener(new View.OnClickListener() {
