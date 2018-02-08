@@ -1,3 +1,3 @@
 # Overview
 
-App for word/sentence translste
+App for word/storageSentence translste

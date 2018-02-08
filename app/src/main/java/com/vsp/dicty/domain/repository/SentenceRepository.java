@@ -1,17 +1,16 @@
 package com.vsp.dicty.domain.repository;
 
-import com.vsp.dicty.domain.model.Sentence;
-import com.vsp.dicty.domain.model.UntranslatedText;
+import com.vsp.dicty.storage.model.StorageSentence;
 import com.vsp.dicty.storage.SentenceRepositoryImpl;
 
 
 public interface SentenceRepository {
 
-    boolean insertSentenceTranslate(Sentence model);
+    boolean insertSentenceTranslate(StorageSentence model);
 
-    boolean updateSentenceTranslate(Sentence model);
+    boolean updateSentenceTranslate(StorageSentence model);
 
-    void getSentenceTranslate(UntranslatedText sentence, SentenceRepositoryImpl.SentenceRepositoryCallback callback);
+    void getSentenceTranslate(StorageSentence sentence, SentenceRepositoryImpl.SentenceRepositoryCallback callback);
 
-    boolean delete(Sentence model);
+    boolean delete(StorageSentence model);
 }

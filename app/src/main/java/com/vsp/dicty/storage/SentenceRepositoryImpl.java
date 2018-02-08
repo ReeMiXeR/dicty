@@ -2,36 +2,40 @@ package com.vsp.dicty.storage;
 
 import android.content.Context;
 
-import com.vsp.dicty.domain.model.Sentence;
-import com.vsp.dicty.domain.model.UntranslatedText;
+import com.vsp.dicty.storage.model.StorageSentence;
 import com.vsp.dicty.domain.repository.SentenceRepository;
 import com.vsp.dicty.network.RestSentenceClient;
 import com.vsp.dicty.network.model.RestSentence;
 import com.vsp.dicty.storage.convertors.StorageSentenceConverter;
 
+import io.realm.Realm;
+
 public class SentenceRepositoryImpl implements SentenceRepository, RestSentenceClient.RestSentenceResultCallback {
 
     private Context mContext;
     private SentenceRepositoryCallback mCallback;
+    private Realm mRealm;
 
 
     public SentenceRepositoryImpl(Context context) {
         mContext = context;
+        Realm.init(mContext);
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
-    public boolean insertSentenceTranslate(Sentence model) {
+    public boolean insertSentenceTranslate(StorageSentence model) {
         
         return false;
     }
 
     @Override
-    public boolean updateSentenceTranslate(Sentence model) {
+    public boolean updateSentenceTranslate(StorageSentence model) {
         return false;
     }
 
     @Override
-    public void getSentenceTranslate(UntranslatedText text, SentenceRepositoryCallback callback) {
+    public void getSentenceTranslate(StorageSentence text, SentenceRepositoryCallback callback) {
         mCallback = callback;
         // TODO: 09.04.2017 check database
         RestSentenceClient.newInstance().translateSentence(text, this);
@@ -39,7 +43,9 @@ public class SentenceRepositoryImpl implements SentenceRepository, RestSentenceC
 
     @Override
     public void handleRestSentenceSuccess(RestSentence result) {
-        mCallback.handleSentenceSuccess(StorageSentenceConverter.convertRestToStorage(result));
+        StorageSentence sentence = StorageSentenceConverter.convertRestToStorage(result);
+
+        mCallback.handleSentenceSuccess(sentence);
     }
 
     @Override
@@ -48,7 +54,7 @@ public class SentenceRepositoryImpl implements SentenceRepository, RestSentenceC
     }
 
     @Override
-    public boolean delete(Sentence model) {
+    public boolean delete(StorageSentence model) {
         return false;
     }
 
@@ -56,7 +62,7 @@ public class SentenceRepositoryImpl implements SentenceRepository, RestSentenceC
 //        mHandler = handler;
 //        RestSentenceClient.RestSentenceResultCallback() {
 //            @Override
-//            public void handleRestSentenceSuccess(Sentence result) {
+//            public void handleRestSentenceSuccess(StorageSentence result) {
 //                if (result != null)
 //                    handler.handleRestSentenceSuccess(result);
 //            }
@@ -69,7 +75,7 @@ public class SentenceRepositoryImpl implements SentenceRepository, RestSentenceC
 //        );
 
     public interface SentenceRepositoryCallback {
-        void handleSentenceSuccess(Sentence result);
+        void handleSentenceSuccess(StorageSentence result);
         void handleSentenceError(String errorMessage);
     }
 }

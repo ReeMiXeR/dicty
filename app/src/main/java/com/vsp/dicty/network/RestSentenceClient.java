@@ -1,9 +1,9 @@
 package com.vsp.dicty.network;
 
-import com.vsp.dicty.domain.model.UntranslatedText;
 import com.vsp.dicty.network.model.RestLangs;
 import com.vsp.dicty.network.model.RestSentence;
 import com.vsp.dicty.network.services.SentenceTranslateService;
+import com.vsp.dicty.storage.model.StorageSentence;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,7 +26,7 @@ public class RestSentenceClient implements Callback<RestSentence> {
         return sInstance;
     }
 
-    public void translateSentence(UntranslatedText text, RestSentenceResultCallback callback) {
+    public void translateSentence(StorageSentence text, RestSentenceResultCallback callback) {
         mSentenceCallback = callback;
 
         Call<RestSentence> callSentence = mSentenceService.getSentenceTranslate(

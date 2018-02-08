@@ -17,8 +17,7 @@ import android.widget.TextView;
 
 import com.vsp.dicty.R;
 import com.vsp.dicty.domain.executor.impl.ThreadExecutor;
-import com.vsp.dicty.domain.model.Sentence;
-import com.vsp.dicty.domain.model.UntranslatedText;
+import com.vsp.dicty.storage.model.StorageSentence;
 import com.vsp.dicty.presentation.presenters.LanguagePresenter;
 import com.vsp.dicty.presentation.presenters.MainPresenter;
 import com.vsp.dicty.presentation.presenters.TranslatePresenter;
@@ -60,7 +59,7 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
     private LinearLayout toolbarLayout;
     private ImageButton imageButton;
     private ArrayList<StorageWord> mWord;
-    private Sentence mSentence;
+    private StorageSentence mStorageSentence;
     private boolean lastState;
     private boolean stopTranslate = false;
     private Timer timer = new Timer();
@@ -150,7 +149,7 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
                             return;
                         }
                         stopTranslate = false;
-                        UntranslatedText text = new UntranslatedText();
+                        StorageSentence text = new StorageSentence();
                         text.setNotTranslatedText(editable.toString());
                         mTranslatePresenter.translateText(text);
                         mProgressLayout.setVisibility(View.VISIBLE);
@@ -175,8 +174,8 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
         Timber.e("onPause");
 //        if (mWord != null)
 //            mTranslatePresenter.saveWord(mWord);
-//        else if (mSentence != null)
-//            mTranslatePresenter.saveSentence(mSentence);
+//        else if (mStorageSentence != null)
+//            mTranslatePresenter.saveSentence(mStorageSentence);
 //        if (lastState)
         //save sentence
 //        else if (!lastState)
@@ -211,15 +210,15 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
     }
 
     @Override
-    public void onSentenceTranslated(Sentence sentence) {
+    public void onSentenceTranslated(StorageSentence storageSentence) {
         Timber.e("onSentenceTranslated");
         if (stopTranslate)
             return;
         mProgressLayout.setVisibility(View.GONE);
-        mSentence = sentence;
+        mStorageSentence = storageSentence;
         mWord = null;
         mWordAdapter.clear();
-        mMainTranslateView.setText(sentence.getTranslatedSentence());
+        mMainTranslateView.setText(storageSentence.getTranslatedSentence());
     }
 
     @Override
@@ -229,7 +228,7 @@ public class TranslateFragment extends Fragment implements MainPresenter.View, T
             if (word.size() != 0 && !stopTranslate) {
                 mProgressLayout.setVisibility(View.GONE);
                 mWord = word;
-                mSentence = null;
+                mStorageSentence = null;
                 mMainTranslateView.setText(word.get(0).getMainTranslate());
                 mRecyclerView.removeAllViewsInLayout();
                 mWordAdapter.setWordArray(word);

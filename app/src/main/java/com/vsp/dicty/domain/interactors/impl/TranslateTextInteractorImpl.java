@@ -7,8 +7,7 @@ import com.vsp.dicty.domain.executor.Executor;
 import com.vsp.dicty.domain.executor.MainThread;
 import com.vsp.dicty.domain.interactors.TranslateTextInteractor;
 import com.vsp.dicty.domain.interactors.base.AbstractInteractor;
-import com.vsp.dicty.domain.model.Sentence;
-import com.vsp.dicty.domain.model.UntranslatedText;
+import com.vsp.dicty.storage.model.StorageSentence;
 import com.vsp.dicty.domain.repository.SentenceRepository;
 import com.vsp.dicty.domain.repository.WordRepository;
 import com.vsp.dicty.storage.SentenceRepositoryImpl;
@@ -25,14 +24,14 @@ public class TranslateTextInteractorImpl extends AbstractInteractor implements T
 
     private TranslateCallback mTranslateCallback;
     private Context mContext;
-    private UntranslatedText mUntranslatedText;
+    private StorageSentence mUntranslatedText;
     private SentenceRepository mSentenceRepository;
 
     public TranslateTextInteractorImpl(Executor threadExecutor,
                                        MainThread mainThread,
                                        TranslateCallback translateCallback,
                                        Context context,
-                                       UntranslatedText text) {
+                                       StorageSentence text) {
         super(threadExecutor, mainThread);
         mTranslateCallback = translateCallback;
         mContext = context;
@@ -84,7 +83,7 @@ public class TranslateTextInteractorImpl extends AbstractInteractor implements T
     }
 
     @Override
-    public void handleSentenceSuccess(final Sentence result) {
+    public void handleSentenceSuccess(final StorageSentence result) {
         mMainThread.post(new Runnable() {
             @Override
             public void run() {

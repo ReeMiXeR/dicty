@@ -7,8 +7,7 @@ import com.vsp.dicty.domain.executor.MainThread;
 import com.vsp.dicty.domain.interactors.TranslateTextInteractor;
 import com.vsp.dicty.domain.interactors.impl.SaveSentenceInteractorImpl;
 import com.vsp.dicty.domain.interactors.impl.TranslateTextInteractorImpl;
-import com.vsp.dicty.domain.model.Sentence;
-import com.vsp.dicty.domain.model.UntranslatedText;
+import com.vsp.dicty.storage.model.StorageSentence;
 import com.vsp.dicty.presentation.presenters.TranslatePresenter;
 import com.vsp.dicty.presentation.presenters.base.AbstractPresenter;
 import com.vsp.dicty.storage.model.StorageWord;
@@ -58,17 +57,17 @@ public class TranslatePresenterImpl extends AbstractPresenter implements Transla
     }
 
     @Override
-    public void saveSentence(Sentence sentence) {
+    public void saveSentence(StorageSentence storageSentence) {
         SaveSentenceInteractorImpl saveSentenceInteractor = new SaveSentenceInteractorImpl(
                 mExecutor,
                 mMainThread,
                 mContext,
-                sentence
+                storageSentence
         );
     }
 
     @Override
-    public void translateText(UntranslatedText text) {
+    public void translateText(StorageSentence text) {
         TranslateTextInteractor translateTextInteractor = new TranslateTextInteractorImpl(
                 mExecutor,
                 mMainThread,
@@ -80,8 +79,8 @@ public class TranslatePresenterImpl extends AbstractPresenter implements Transla
     }
 
     @Override
-    public void onSentenceTranslated(Sentence sentence) {
-        mView.onSentenceTranslated(sentence);
+    public void onSentenceTranslated(StorageSentence storageSentence) {
+        mView.onSentenceTranslated(storageSentence);
     }
 
     @Override
